@@ -459,10 +459,13 @@
         });
 
         async function loadFromGitHub(token, owner, repo, path) {
+            const saveBtn = document.getElementById('btnSaveGh');
             try {
                 log("Đang trích xuất dữ liệu từ GitHub Cloud...", 'info');
-                btnSaveSession.innerHTML = `<div class="spinner"></div> Đang tải...`;
-                btnSaveSession.disabled = true;
+                if (saveBtn) {
+                    saveBtn.innerHTML = `<div class="spinner inline-block align-middle mr-2"></div> Đang tải...`;
+                    saveBtn.disabled = true;
+                }
                 
                 const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
                 const response = await fetch(url, {
@@ -518,8 +521,10 @@
                 log(`Lỗi tải dữ liệu Cloud: ${err.message}`, 'error');
                 console.error(err);
             } finally {
-                btnSaveSession.disabled = false;
-                btnSaveSession.innerHTML = `Lưu & Tải Data`; // Trả lại text nút (nếu nút đổi màu)
+                if (saveBtn) {
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = `Lưu & Tải Data`; // Trả lại text nút
+                }
                 
                 // Khôi phục nút Save & Sync ở ngoài UI chính (Nút xanh đồng bộ)
                 const mainSyncBtn = document.getElementById('btnSyncCloud');
