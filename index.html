@@ -487,17 +487,24 @@
                     let jsonContent = "";
                     
                     // Xử lý tệp lớn (>1MB) mà GitHub không trả về content Base64
-                    if (!data.content && data.download_url) {
-                        log("Phát hiện tệp dữ liệu lớn. Đang khởi tạo luồng tải đặc biệt...", 'warning');
-                        const rawResponse = await fetch(data.download_url, {
-                            headers: { 'Authorization': `Bearer ${token}` }
+                    if (!data.content) {
+                        log("Phát hiện tệp dữ liệu lớn. Đang khởi tạo luồng tải đặc biệt qua API...", 'warning');
+                        
+                        // Sử dụng chính API URL nhưng đổi Accept header thành raw để lách luật CORS của trình duyệt
+                        const rawResponse = await fetch(url, {
+                            headers: { 
+                                'Authorization': `Bearer ${token}`,
+                                'Accept': 'application/vnd.github.v3.raw'
+                            }
                         });
                         
-                        if(!rawResponse.ok) throw new Error("Lỗi tải tệp dữ liệu thô.");
-                        // Dữ liệu tải từ download_url là nội dung gốc (JSON plain text), không bị mã hóa Base64
+                        if(!rawResponse.ok) throw new Error(`Lỗi tải tệp dữ liệu thô (HTTP ${rawResponse.status})`);
+                        
+                        // Dữ liệu tải về là nội dung gốc (JSON plain text), không bị mã hóa Base64
                         const rawText = await rawResponse.text();
-                        // Trích xuất phần dữ liệu gốc, bỏ qua các thẻ wrapper nếu có
                         jsonContent = rawText;
+                        
+                        // Cắt gọt dữ liệu để đảm bảo file JSON chuẩn
                         if(jsonContent.includes('{"facilities"')) {
                              jsonContent = jsonContent.substring(jsonContent.indexOf('{"facilities"'));
                         }
