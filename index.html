@@ -596,9 +596,9 @@
                 
                 const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
                 
-                // THÊM LỆNH CẤM TRÌNH DUYỆT LƯU ĐỆM KHI HỎI API
+                // Cấm trình duyệt lưu đệm khi gọi API chính của GitHub
                 const response = await fetch(url, {
-                    headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Cache-Control': 'no-cache' },
+                    headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' },
                     cache: 'no-store'
                 });
 
@@ -615,15 +615,15 @@
                     if (!data.content && data.download_url) {
                         log("Phát hiện tệp dữ liệu lớn. Đang khởi tạo luồng tải trực tiếp...", 'warning');
                         
-                        // TUYỆT CHIÊU XUYÊN THỦNG BỘ NHỚ ĐỆM (CACHE-BUSTING)
-                        // Gắn thêm biến t = Thời gian hiện tại vào đuôi link tải
+                        // XUYÊN THỦNG BỘ NHỚ ĐỆM BẰNG QUERY STRING (Bỏ cache: 'no-store' để tránh lỗi CORS)
                         const separator = data.download_url.includes('?') ? '&' : '?';
                         const noCacheUrl = `${data.download_url}${separator}t=${Date.now()}`;
                         
-                        const rawResponse = await fetch(noCacheUrl, { cache: 'no-store' });
+                        const rawResponse = await fetch(noCacheUrl);
                         if(!rawResponse.ok) throw new Error(`Lỗi tải tệp dữ liệu thô (HTTP ${rawResponse.status})`);
                         jsonContent = await rawResponse.text();
                         
+                        // Lọc bỏ ký tự rác (nếu có) trước dấu ngoặc nhọn đầu tiên
                         if(jsonContent.includes('{"facilities"')) jsonContent = jsonContent.substring(jsonContent.indexOf('{"facilities"'));
                     } else if (data.content) {
                          jsonContent = atou(data.content);
@@ -631,6 +631,7 @@
                     
                     appState = JSON.parse(jsonContent);
                     
+                    // Khôi phục an toàn (tránh lỗi JSON đời cũ thiếu key)
                     if(!appState.facilities || appState.facilities.length === 0) appState.facilities = ["Cơ sở mặc định"];
                     if(!appState.currentFacility) appState.currentFacility = appState.facilities[0];
                     if(!appState.data) appState.data = {};
@@ -668,21 +669,26 @@
                 btnSyncCloud.disabled = true;
 
                 const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+                
+                // GIẢI PHÁP CHỐNG LỖI "SHA WASN'T SUPPLIED": 
+                // Tự động gọi API hỏi mã SHA mới nhất trước khi Push
                 let currentSha = githubSha;
                 try {
-                    // CẤM LƯU ĐỆM KHI LẤY MÃ SHA (CHỐNG LỖI CONFLICT FILE)
                     const checkRes = await fetch(url, { 
-                        headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Cache-Control': 'no-cache' },
+                        headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' },
                         cache: 'no-store'
                     });
-                    if(checkRes.ok) { const checkData = await checkRes.json(); currentSha = checkData.sha; }
-                } catch (e) { }
+                    if(checkRes.ok) { 
+                        const checkData = await checkRes.json(); 
+                        currentSha = checkData.sha; 
+                    }
+                } catch (e) { /* Bỏ qua nếu là file mới hoàn toàn */ }
 
                 const payloadStr = JSON.stringify(appState);
                 const base64Content = utoa(payloadStr);
 
                 const body = { message: `Cập nhật dữ liệu từ điểm trạm lúc ${new Date().toLocaleTimeString('vi-VN')}`, content: base64Content };
-                if (currentSha) body.sha = currentSha;
+                if (currentSha) body.sha = currentSha; // Chắc chắn có SHA nếu file đã tồn tại
 
                 const putRes = await fetch(url, {
                     method: 'PUT',
