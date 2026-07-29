@@ -12,13 +12,11 @@
         .spinner { border: 3px solid rgba(255,255,255,.3); border-radius: 50%; border-top-color: #fff; width: 20px; height: 20px; animation: spin 1s ease-in-out infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        /* Tabs styling */
         .tab-btn { border-bottom: 3px solid transparent; transition: all 0.3s; }
         .tab-btn.active { border-bottom-color: #2563eb; color: #1e40af; font-weight: 700; background-color: #eff6ff; }
     </style>
@@ -26,23 +24,29 @@
 <body class="min-h-screen text-gray-800 flex flex-col items-center py-6 px-4">
 
     <div class="w-full max-w-7xl bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
-        <!-- Header -->
         <div class="bg-gradient-to-r from-blue-700 to-blue-500 text-white p-5 text-center border-b-4 border-blue-800">
             <h1 class="text-2xl md:text-3xl font-bold uppercase tracking-wide drop-shadow-md">Báo Cáo Chiến Dịch 100 Ngày</h1>
             <p class="text-blue-100 mt-1 font-medium text-md">LỌC TRÙNG - THEO DÕI LỊCH SỬ - ĐA CƠ SỞ</p>
         </div>
 
         <div class="p-4 md:p-6 space-y-6">
-            <!-- Trình Quản Lý Cơ Sở & Lưu Phiên -->
             <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
                 <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
                     <label class="font-bold text-blue-900 whitespace-nowrap">Luồng dữ liệu (Cơ sở):</label>
                     <select id="facilitySelect" class="w-full sm:w-64 p-2.5 border border-blue-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-semibold text-gray-800 bg-white">
                         <!-- Được điền bởi JS -->
                     </select>
-                    <button id="btnAddFacility" class="bg-white hover:bg-blue-100 text-blue-700 px-4 py-2.5 rounded-lg border border-blue-300 text-sm font-bold shadow-sm transition whitespace-nowrap">
-                        + Thêm Cơ Sở
-                    </button>
+                    <div class="flex gap-2">
+                        <button id="btnAddFacility" class="bg-white hover:bg-blue-100 text-blue-700 px-3 py-2.5 rounded-lg border border-blue-300 text-sm font-bold shadow-sm transition whitespace-nowrap" title="Thêm cơ sở mới">
+                            + Thêm
+                        </button>
+                        <button id="btnDeleteFacility" class="bg-white hover:bg-red-100 text-red-600 px-3 py-2.5 rounded-lg border border-red-300 text-sm font-bold shadow-sm transition whitespace-nowrap" title="Xóa tạm thời cơ sở này">
+                            - Xóa
+                        </button>
+                        <button id="btnRecoverFacility" class="hidden bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-2.5 rounded-lg border border-yellow-300 text-sm font-bold shadow-sm transition whitespace-nowrap" title="Khôi phục cơ sở đã xóa">
+                            <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg> Khôi phục
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="w-full md:w-auto flex justify-end gap-2">
@@ -57,11 +61,10 @@
                 </div>
             </div>
 
-            <!-- TABS HEADER -->
             <div class="flex overflow-x-auto border-b border-gray-200 bg-gray-50 rounded-t-lg">
                 <button class="tab-btn active px-6 py-3 text-sm md:text-base font-semibold text-gray-600 whitespace-nowrap focus:outline-none flex items-center gap-2" data-target="tab-import">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                    1. Nạp File & Xuất Báo Cáo
+                    1. Nạp & Xuất File
                 </button>
                 <button class="tab-btn px-6 py-3 text-sm md:text-base font-semibold text-gray-600 whitespace-nowrap focus:outline-none flex items-center gap-2" data-target="tab-dashboard">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
@@ -69,17 +72,19 @@
                 </button>
                 <button class="tab-btn px-6 py-3 text-sm md:text-base font-semibold text-gray-600 whitespace-nowrap focus:outline-none flex items-center gap-2" data-target="tab-search">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    3. Tra Cứu Lịch Sử Bệnh Nhân
+                    3. Lịch Sử Bệnh Nhân
+                </button>
+                <button class="tab-btn px-6 py-3 text-sm md:text-base font-semibold text-gray-600 whitespace-nowrap focus:outline-none flex items-center gap-2" data-target="tab-notes">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    4. Ghi chú & Nhắc việc
                 </button>
             </div>
 
-            <!-- TABS CONTENT -->
             <div id="tabs-container" class="min-h-[400px]">
                 
                 <!-- TAB 1: IMPORT & EXPORT -->
                 <div id="tab-import" class="tab-content block space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- File Input Area -->
                         <div class="space-y-3">
                             <div class="flex justify-between items-end">
                                 <label class="block text-sm font-bold text-gray-700">A. Nạp Dữ Liệu Vào Cơ Sở</label>
@@ -97,7 +102,6 @@
                                     <input id="fileInput" type="file" class="hidden" accept=".xlsx, .xls, .html" multiple />
                                 </label>
                             </div>
-                            <!-- Danh sách file -->
                             <div id="fileListContainer" class="hidden bg-gray-50 p-3 rounded-lg border border-gray-200 shadow-inner mt-2">
                                 <div class="flex justify-between items-center mb-2 border-b border-gray-200 pb-1">
                                     <span class="text-sm font-semibold text-gray-700">File đang chờ nạp (<span id="fileCountText">0</span>):</span>
@@ -111,7 +115,6 @@
                             </button>
                         </div>
 
-                        <!-- Date Picker Area -->
                         <div class="space-y-3">
                             <label class="block text-sm font-bold text-gray-700">B. Xuất Báo Cáo Chiến Dịch</label>
                             <p class="text-xs text-gray-500 mb-2">Chọn <b>Ngày A</b>. Hệ thống xuất 5 tab (A, A-1, A-2, A-3, A-4) và các tab tổng hợp.</p>
@@ -123,7 +126,6 @@
                             </button>
                         </div>
                     </div>
-                    <!-- Terminal Logs -->
                     <div class="bg-gray-800 border border-gray-700 rounded-xl p-4 shadow-inner mt-4">
                         <h3 class="text-sm font-bold text-gray-300 mb-2 border-b border-gray-600 pb-2">Terminal Hệ thống:</h3>
                         <div id="logArea" class="h-32 overflow-y-auto text-xs font-mono text-green-400 space-y-1">
@@ -156,7 +158,6 @@
                                 </tr>
                             </thead>
                             <tbody id="dashboardTableBody" class="bg-white">
-                                <!-- Dữ liệu Dashboard sẽ render ở đây -->
                             </tbody>
                         </table>
                         <div id="dashboardEmptyMsg" class="hidden p-8 text-center text-gray-500">Chưa có dữ liệu để thống kê.</div>
@@ -178,11 +179,25 @@
                     </div>
                 </div>
 
+                <!-- TAB 4: NOTES -->
+                <div id="tab-notes" class="tab-content hidden space-y-4">
+                    <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 mb-4 shadow-sm">
+                        <label class="block text-sm font-bold text-yellow-900 mb-2">Thêm ghi chú mới</label>
+                        <div class="flex flex-col md:flex-row gap-3">
+                            <input type="date" id="noteDate" class="p-3 border border-yellow-300 rounded-lg outline-none w-full md:w-48 bg-white font-medium">
+                            <input type="text" id="noteContent" placeholder="Nhập nội dung ghi chú, nhắc việc..." class="flex-1 p-3 border border-yellow-300 rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none bg-white">
+                            <button id="btnAddNote" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-bold transition shadow-sm whitespace-nowrap">Lưu Ghi Chú</button>
+                        </div>
+                    </div>
+                    <div id="notesList" class="space-y-3 max-h-[50vh] overflow-y-auto pr-2">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 
-    <!-- GITHUB CONFIG MODAL -->
     <div id="githubModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
         <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4">
             <h3 class="text-xl font-bold text-gray-800 mb-4">Cấu Hình Cloud (GitHub API)</h3>
@@ -193,16 +208,10 @@
                     <p class="text-xs text-red-500 mt-1">Khóa chỉ lưu tạm ở Session Storage, tự hủy khi đóng tab.</p>
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Owner (Tên tài khoản Github):</label>
-                    <input type="text" id="ghOwner" placeholder="Ví dụ: myusername" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Repository (Tên kho chứa Private):</label>
-                    <input type="text" id="ghRepo" placeholder="Ví dụ: my-health-data" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Đường dẫn tệp JSON:</label>
-                    <input type="text" id="ghPath" placeholder="Ví dụ: data/app_state.json" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="block text-sm font-bold text-gray-700 mb-1 text-gray-400">Tài khoản & Kho chứa (Mặc định):</label>
+                    <input type="text" id="ghOwner" value="liph97" disabled class="w-full p-2.5 border border-gray-200 bg-gray-100 rounded-lg outline-none text-gray-500 mb-2">
+                    <input type="text" id="ghRepo" value="baocao100ngay" disabled class="w-full p-2.5 border border-gray-200 bg-gray-100 rounded-lg outline-none text-gray-500 mb-2">
+                    <input type="text" id="ghPath" value="data/app_state.json" disabled class="w-full p-2.5 border border-gray-200 bg-gray-100 rounded-lg outline-none text-gray-500">
                 </div>
             </div>
             <div class="mt-6 flex justify-end gap-3">
@@ -212,41 +221,43 @@
         </div>
     </div>
 
-    <!-- MAIN SCRIPT -->
     <script>
-        // --- STATE MANAGEMENT ---
         let appState = {
             facilities: [],
             currentFacility: "",
-            data: {} // { "Ten_Co_So": [ { row_data_1 }, { row_data_2 } ] }
+            data: {},
+            notes: {}
         };
-        let githubSha = null; // Kiểm soát phiên bản (Concurrency control)
+        let githubSha = null; 
         
         function initApp() {
             try {
                 if(!appState.facilities || appState.facilities.length === 0) appState.facilities = ["Cơ sở mặc định"];
                 if(!appState.currentFacility) appState.currentFacility = appState.facilities[0];
                 if(!appState.data) appState.data = {};
+                if(!appState.notes) appState.notes = {};
                 
                 appState.facilities.forEach(fac => {
                     if(!appState.data[fac]) appState.data[fac] = [];
+                    if(!appState.notes[fac]) appState.notes[fac] = [];
                 });
 
                 renderFacilitySelect();
                 updateRecordCountUI();
                 renderDashboard();
+                renderNotes();
+                updateRecoverButton();
                 
-                // Set default report date
                 const today = new Date();
                 document.getElementById('reportDate').value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+                document.getElementById('noteDate').value = document.getElementById('reportDate').value;
                 
                 log("Đã khởi tạo giao diện. Đang kiểm tra cấu hình Cloud...", 'info');
                 
-                // Tự động kiểm tra khóa truy cập trong Session
                 const token = sessionStorage.getItem('gh_token');
-                const owner = sessionStorage.getItem('gh_owner');
-                const repo = sessionStorage.getItem('gh_repo');
-                const path = sessionStorage.getItem('gh_path');
+                const owner = document.getElementById('ghOwner').value;
+                const repo = document.getElementById('ghRepo').value;
+                const path = document.getElementById('ghPath').value;
                 
                 if (token && owner && repo && path) {
                     loadFromGitHub(token, owner, repo, path);
@@ -259,7 +270,6 @@
             }
         }
 
-        // --- TAB MANAGEMENT ---
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
 
@@ -272,23 +282,25 @@
                 const targetId = btn.getAttribute('data-target');
                 document.getElementById(targetId).classList.remove('hidden');
 
-                // Auto refresh specific tabs when switched to
                 if(targetId === 'tab-dashboard') renderDashboard();
                 if(targetId === 'tab-search') document.getElementById('searchInput').focus();
+                if(targetId === 'tab-notes') renderNotes();
             });
         });
 
-        // --- UI VARIABLES ---
+        // --- STREAMING_CHUNK:Biến giao diện và Tiện ích cơ bản... ---
         let accumulatedFiles = []; 
         
         const facilitySelect = document.getElementById('facilitySelect');
         const btnAddFacility = document.getElementById('btnAddFacility');
+        const btnDeleteFacility = document.getElementById('btnDeleteFacility');
+        const btnRecoverFacility = document.getElementById('btnRecoverFacility');
+        
         const btnCloudConfig = document.getElementById('btnCloudConfig');
         const btnSyncCloud = document.getElementById('btnSyncCloud');
         const recordCountBadge = document.getElementById('recordCountBadge');
         const logArea = document.getElementById('logArea');
 
-        // File UI
         const fileInput = document.getElementById('fileInput');
         const fileLabel = document.getElementById('fileLabel');
         const fileListContainer = document.getElementById('fileListContainer');
@@ -296,7 +308,6 @@
         const btnClearFiles = document.getElementById('btnClearFiles');
         const btnProcess = document.getElementById('btnProcess');
 
-        // --- STREAMING_CHUNK:Core Utility Functions & Deduplication Logic... ---
         function log(msg, type = 'info') {
             const div = document.createElement('div');
             const time = new Date().toLocaleTimeString('vi-VN');
@@ -348,7 +359,28 @@
             return id;
         }
 
-        // --- FACILITY MANAGEMENT ---
+        // --- STREAMING_CHUNK:Thuật toán Chunking Base64 (Xử lý File Khổng Lồ)... ---
+        function utoa(str) {
+            const bytes = new TextEncoder().encode(str);
+            let binary = '';
+            const chunkSize = 8192; 
+            for (let i = 0; i < bytes.length; i += chunkSize) {
+                binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+            }
+            return btoa(binary);
+        }
+        
+        function atou(b64) {
+            const binary = atob(b64);
+            const len = binary.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            return new TextDecoder().decode(bytes);
+        }
+
+        // --- STREAMING_CHUNK:Quản lý Cơ sở y tế (Dropdown, Xóa, Khôi phục)... ---
         function renderFacilitySelect() {
             facilitySelect.innerHTML = '';
             appState.facilities.forEach(fac => {
@@ -372,10 +404,22 @@
             }
         }
 
+        function updateRecoverButton() {
+            const btn = btnRecoverFacility;
+            if(!btn) return;
+            const hidden = Object.keys(appState.data).filter(f => !appState.facilities.includes(f));
+            if(hidden.length > 0) {
+                btn.classList.remove('hidden'); btn.classList.add('inline-flex');
+            } else {
+                btn.classList.add('hidden'); btn.classList.remove('inline-flex');
+            }
+        }
+
         facilitySelect.addEventListener('change', (e) => {
             appState.currentFacility = e.target.value;
             updateRecordCountUI();
             renderDashboard();
+            renderNotes();
             document.getElementById('searchResults').innerHTML = '<div class="text-center text-gray-400 py-10">Đã đổi cơ sở. Vui lòng tìm kiếm lại.</div>';
             log(`Đã chuyển sang: ${appState.currentFacility}`, 'info');
         });
@@ -387,46 +431,142 @@
                 if(!appState.facilities.includes(facName)) {
                     appState.facilities.push(facName);
                     appState.data[facName] = [];
+                    if(!appState.notes) appState.notes = {};
+                    appState.notes[facName] = [];
                     appState.currentFacility = facName;
-                    renderFacilitySelect();
-                    updateRecordCountUI();
-                    renderDashboard();
-                    log(`Đã thêm và chuyển sang cơ sở mới: ${facName}`, 'success');
-                    if(sessionStorage.getItem('gh_token')) syncToGitHub(); // Tự động sync
+                    renderFacilitySelect(); updateRecordCountUI(); renderDashboard(); renderNotes(); updateRecoverButton();
+                    log(`Đã thêm cơ sở mới: ${facName}`, 'success');
+                    if(sessionStorage.getItem('gh_token')) syncToGitHub();
                 } else {
                     alert("Tên cơ sở đã tồn tại!");
                 }
             }
         });
 
-        // Base64 UTF-8 Encoding Helpers (Tối ưu hóa cho file JSON dung lượng siêu lớn >10MB)
-        function utoa(str) {
-            const bytes = new TextEncoder().encode(str);
-            let binary = '';
-            // Sử dụng kỹ thuật Chunking (chia nhỏ) để tránh quá tải bộ nhớ đệm (OOM) khi cộng chuỗi
-            const chunkSize = 8192; 
-            for (let i = 0; i < bytes.length; i += chunkSize) {
-                binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+        btnDeleteFacility.addEventListener('click', () => {
+            if(appState.facilities.length <= 1) {
+                alert("Không thể xóa cơ sở duy nhất đang hoạt động!"); return;
             }
-            return btoa(binary);
-        }
-        
-        function atou(b64) {
-            const binary = atob(b64);
-            const len = binary.length;
-            const bytes = new Uint8Array(len);
-            for (let i = 0; i < len; i++) {
-                bytes[i] = binary.charCodeAt(i);
+            if(confirm(`Bạn có chắc muốn XÓA TẠM THỜI cơ sở "${appState.currentFacility}"?\n(Dữ liệu sẽ được ẩn đi và có thể Khôi Phục sau này)`)) {
+                appState.facilities = appState.facilities.filter(f => f !== appState.currentFacility);
+                appState.currentFacility = appState.facilities[0];
+                renderFacilitySelect(); updateRecordCountUI(); renderDashboard(); renderNotes(); updateRecoverButton();
+                log(`Đã ẩn cơ sở. Chuyển về: ${appState.currentFacility}`, 'warning');
+                if(sessionStorage.getItem('gh_token')) syncToGitHub();
             }
-            return new TextDecoder().decode(bytes);
+        });
+
+        btnRecoverFacility.addEventListener('click', () => {
+            const hidden = Object.keys(appState.data).filter(f => !appState.facilities.includes(f));
+            if(hidden.length === 0) return;
+            let promptText = "Danh sách cơ sở đã ẩn:\n";
+            hidden.forEach((f, i) => promptText += `${i+1}. ${f}\n`);
+            promptText += "\nNhập chính xác TÊN CƠ SỞ bạn muốn khôi phục:";
+            const toRecover = prompt(promptText);
+            if(toRecover && hidden.includes(toRecover.trim())) {
+                const facName = toRecover.trim();
+                appState.facilities.push(facName);
+                appState.currentFacility = facName;
+                renderFacilitySelect(); updateRecordCountUI(); renderDashboard(); renderNotes(); updateRecoverButton();
+                log(`Đã khôi phục cơ sở: ${facName}`, 'success');
+                if(sessionStorage.getItem('gh_token')) syncToGitHub();
+            } else if(toRecover) {
+                alert("Tên cơ sở không khớp với danh sách ẩn!");
+            }
+        });
+
+        // --- STREAMING_CHUNK:Quản lý Ghi chú (CRUD Notes)... ---
+        function renderNotes() {
+            const list = document.getElementById('notesList');
+            if(!list) return;
+            if(!appState.notes) appState.notes = {};
+            const notes = appState.notes[appState.currentFacility] || [];
+            
+            notes.sort((a, b) => {
+                const dA = new Date(a.date).getTime();
+                const dB = new Date(b.date).getTime();
+                if(dA !== dB) return dB - dA;
+                return b.id - a.id;
+            });
+
+            list.innerHTML = '';
+            if(notes.length === 0) {
+                list.innerHTML = '<div class="text-center text-gray-400 py-10 font-medium">Chưa có ghi chú nào cho cơ sở này.</div>';
+                return;
+            }
+
+            notes.forEach(note => {
+                const div = document.createElement('div');
+                div.className = `p-4 rounded-xl border ${note.starred ? 'bg-yellow-50 border-yellow-400 shadow-md' : 'bg-white border-gray-200 hover:shadow-md'} transition duration-200 flex flex-col sm:flex-row justify-between gap-4 group`;
+                const dObj = new Date(note.date);
+                const dStr = `${String(dObj.getDate()).padStart(2,'0')}/${String(dObj.getMonth()+1).padStart(2,'0')}/${dObj.getFullYear()}`;
+                const starIcon = note.starred ? `<svg class="w-5 h-5 text-yellow-500 fill-current drop-shadow-sm" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>` : '';
+
+                div.innerHTML = `
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="text-xs font-bold px-2.5 py-1 bg-gray-800 text-white rounded-md shadow-sm">${dStr}</span>
+                            ${starIcon}
+                        </div>
+                        <p class="text-gray-800 text-sm whitespace-pre-wrap leading-relaxed font-medium">${note.content}</p>
+                    </div>
+                    <div class="flex sm:flex-col items-center sm:items-end justify-end sm:justify-start gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition duration-200 border-t sm:border-t-0 pt-3 sm:pt-0 border-gray-100">
+                        <div class="flex gap-1.5 bg-gray-50 p-1 rounded-lg border border-gray-200">
+                            <button onclick="toggleNoteStar(${note.id})" class="p-1.5 text-gray-500 hover:text-yellow-600 hover:bg-yellow-100 rounded-md transition" title="Đánh dấu quan trọng">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                            </button>
+                            <button onclick="editNote(${note.id})" class="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-100 rounded-md transition" title="Chỉnh sửa">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                            </button>
+                            <button onclick="deleteNote(${note.id})" class="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-100 rounded-md transition" title="Xóa">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
         }
 
+        document.getElementById('btnAddNote').addEventListener('click', () => {
+            const content = document.getElementById('noteContent').value.trim();
+            const dateStr = document.getElementById('noteDate').value;
+            if(!content || !dateStr) { alert("Vui lòng nhập đủ ngày và nội dung ghi chú!"); return; }
+            if(!appState.notes) appState.notes = {};
+            if(!appState.notes[appState.currentFacility]) appState.notes[appState.currentFacility] = [];
+            
+            appState.notes[appState.currentFacility].push({ id: Date.now(), date: dateStr, content: content, starred: false });
+            document.getElementById('noteContent').value = '';
+            renderNotes(); 
+            if(sessionStorage.getItem('gh_token')) syncToGitHub();
+            log("Đã thêm ghi chú mới.", "success");
+        });
+
+        window.toggleNoteStar = function(id) {
+            const note = appState.notes[appState.currentFacility].find(n => n.id === id);
+            if(note) { note.starred = !note.starred; renderNotes(); if(sessionStorage.getItem('gh_token')) syncToGitHub(); }
+        }
+        window.deleteNote = function(id) {
+            if(confirm('Bạn có chắc muốn xóa ghi chú này?')) {
+                appState.notes[appState.currentFacility] = appState.notes[appState.currentFacility].filter(n => n.id !== id);
+                renderNotes(); if(sessionStorage.getItem('gh_token')) syncToGitHub();
+            }
+        }
+        window.editNote = function(id) {
+            const note = appState.notes[appState.currentFacility].find(n => n.id === id);
+            if(note) {
+                const newContent = prompt('Sửa nội dung ghi chú:', note.content);
+                if(newContent !== null && newContent.trim() !== "") {
+                    note.content = newContent.trim();
+                    renderNotes(); if(sessionStorage.getItem('gh_token')) syncToGitHub();
+                }
+            }
+        }
+
+        // --- STREAMING_CHUNK:GitHub Cloud Sync & Fetching... ---
         const modalGh = document.getElementById('githubModal');
         btnCloudConfig.addEventListener('click', () => {
             document.getElementById('ghToken').value = sessionStorage.getItem('gh_token') || '';
-            document.getElementById('ghOwner').value = sessionStorage.getItem('gh_owner') || '';
-            document.getElementById('ghRepo').value = sessionStorage.getItem('gh_repo') || '';
-            document.getElementById('ghPath').value = sessionStorage.getItem('gh_path') || 'data/app_state.json';
             modalGh.classList.remove('hidden');
         });
 
@@ -438,42 +578,24 @@
             const repo = document.getElementById('ghRepo').value.trim();
             const path = document.getElementById('ghPath').value.trim();
             
-            if(!token || !owner || !repo || !path) {
-                alert("Vui lòng nhập đầy đủ thông tin cấu hình!");
-                return;
-            }
+            if(!token) { alert("Vui lòng nhập PAT Token!"); return; }
 
-            // Bảo mật nghiêm ngặt: PAT chỉ được cấp vào bộ nhớ phiên
             sessionStorage.setItem('gh_token', token);
-            sessionStorage.setItem('gh_owner', owner);
-            sessionStorage.setItem('gh_repo', repo);
-            sessionStorage.setItem('gh_path', path);
-            
             modalGh.classList.add('hidden');
             log("Đã lưu trữ khóa API tạm thời.", "success");
             loadFromGitHub(token, owner, repo, path);
         });
 
-        btnSyncCloud.addEventListener('click', () => {
-            syncToGitHub();
-        });
+        btnSyncCloud.addEventListener('click', () => syncToGitHub());
 
         async function loadFromGitHub(token, owner, repo, path) {
             const saveBtn = document.getElementById('btnSaveGh');
             try {
                 log("Đang trích xuất dữ liệu từ GitHub Cloud...", 'info');
-                if (saveBtn) {
-                    saveBtn.innerHTML = `<div class="spinner inline-block align-middle mr-2"></div> Đang tải...`;
-                    saveBtn.disabled = true;
-                }
+                if (saveBtn) { saveBtn.innerHTML = `<div class="spinner inline-block align-middle mr-2"></div> Đang tải...`; saveBtn.disabled = true; }
                 
                 const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-                const response = await fetch(url, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
+                const response = await fetch(url, { headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' } });
 
                 if (response.status === 404) {
                     log("Kho dữ liệu trống rỗng. File sẽ được tạo mới khi đồng bộ.", 'warning');
@@ -482,76 +604,52 @@
                     throw new Error(`HTTP Error: ${response.status}`);
                 } else {
                     const data = await response.json();
-                    githubSha = data.sha; // Lưu vết SHA hiện tại
-                    
+                    githubSha = data.sha; 
                     let jsonContent = "";
                     
-                    // Xử lý tệp lớn (>1MB) mà GitHub không trả về content Base64
-                    if (!data.content) {
-                        log("Phát hiện tệp dữ liệu lớn. Đang khởi tạo luồng tải đặc biệt qua API...", 'warning');
-                        
-                        // Sử dụng chính API URL nhưng đổi Accept header thành raw để lách luật CORS của trình duyệt
-                        const rawResponse = await fetch(url, {
-                            headers: { 
-                                'Authorization': `Bearer ${token}`,
-                                'Accept': 'application/vnd.github.v3.raw'
-                            }
-                        });
-                        
+                    if (!data.content && data.download_url) {
+                        log("Phát hiện tệp dữ liệu lớn. Đang khởi tạo luồng tải trực tiếp...", 'warning');
+                        const rawResponse = await fetch(data.download_url);
                         if(!rawResponse.ok) throw new Error(`Lỗi tải tệp dữ liệu thô (HTTP ${rawResponse.status})`);
+                        jsonContent = await rawResponse.text();
                         
-                        // Dữ liệu tải về là nội dung gốc (JSON plain text), không bị mã hóa Base64
-                        const rawText = await rawResponse.text();
-                        jsonContent = rawText;
-                        
-                        // Cắt gọt dữ liệu để đảm bảo file JSON chuẩn
-                        if(jsonContent.includes('{"facilities"')) {
-                             jsonContent = jsonContent.substring(jsonContent.indexOf('{"facilities"'));
-                        }
+                        if(jsonContent.includes('{"facilities"')) jsonContent = jsonContent.substring(jsonContent.indexOf('{"facilities"'));
                     } else if (data.content) {
-                         jsonContent = atou(data.content); // Giải mã Base64 UTF-8 cho tệp < 1MB
-                    } else {
-                         throw new Error("Không tìm thấy nội dung hợp lệ từ GitHub.");
-                    }
+                         jsonContent = atou(data.content);
+                    } else { throw new Error("Không tìm thấy nội dung hợp lệ."); }
                     
                     appState = JSON.parse(jsonContent);
-                    if(!appState.facilities) appState.facilities = ["Cơ sở mặc định"];
+                    
+                    if(!appState.facilities || appState.facilities.length === 0) appState.facilities = ["Cơ sở mặc định"];
                     if(!appState.currentFacility) appState.currentFacility = appState.facilities[0];
                     if(!appState.data) appState.data = {};
+                    if(!appState.data[appState.currentFacility]) appState.data[appState.currentFacility] = [];
+                    if(!appState.notes) appState.notes = {};
+                    if(!appState.notes[appState.currentFacility]) appState.notes[appState.currentFacility] = [];
                     
-                    renderFacilitySelect();
-                    updateRecordCountUI();
-                    renderDashboard();
-                    log(`Kết nối Cloud thành công. Mã băm phiên bản: ${githubSha.substring(0, 7)}...`, 'success');
+                    let totalRecords = 0;
+                    Object.keys(appState.data).forEach(fac => totalRecords += appState.data[fac].length);
+                    
+                    renderFacilitySelect(); updateRecordCountUI(); renderDashboard(); renderNotes(); updateRecoverButton();
+                    log(`Kết nối Cloud thành công. Mã băm: ${githubSha.substring(0, 7)}.`, 'success');
+                    log(`TỔNG DỮ LIỆU ĐÃ NẠP: ${totalRecords} lượt khám.`, 'success');
                 }
             } catch (err) {
                 log(`Lỗi tải dữ liệu Cloud: ${err.message}`, 'error');
-                console.error(err);
             } finally {
-                if (saveBtn) {
-                    saveBtn.disabled = false;
-                    saveBtn.innerHTML = `Lưu & Tải Data`; // Trả lại text nút
-                }
-                
-                // Khôi phục nút Save & Sync ở ngoài UI chính (Nút xanh đồng bộ)
-                const mainSyncBtn = document.getElementById('btnSyncCloud');
-                if(mainSyncBtn) {
-                     mainSyncBtn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg> Đồng bộ Cloud`;
-                     mainSyncBtn.disabled = false;
-                }
+                if (saveBtn) { saveBtn.disabled = false; saveBtn.innerHTML = `Lưu & Tải Data`; }
+                btnSyncCloud.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg> Đồng bộ Cloud`;
+                btnSyncCloud.disabled = false;
             }
         }
 
         async function syncToGitHub() {
             const token = sessionStorage.getItem('gh_token');
-            const owner = sessionStorage.getItem('gh_owner');
-            const repo = sessionStorage.getItem('gh_repo');
-            const path = sessionStorage.getItem('gh_path');
+            const owner = document.getElementById('ghOwner').value;
+            const repo = document.getElementById('ghRepo').value;
+            const path = document.getElementById('ghPath').value;
 
-            if (!token || !owner || !repo || !path) {
-                log("Lỗi: Yêu cầu thông tin chứng thực trước khi đẩy dữ liệu lên Cloud.", 'error');
-                return;
-            }
+            if (!token) { log("Yêu cầu thông tin chứng thực trước khi đẩy dữ liệu lên Cloud.", 'error'); return; }
 
             try {
                 log("Đang đóng gói và truyền tải dữ liệu lên Cloud...", 'warning');
@@ -559,39 +657,21 @@
                 btnSyncCloud.disabled = true;
 
                 const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-                
-                // KIỂM SOÁT ĐỒNG THỜI (Concurrency Check): Trích xuất SHA mới nhất trước khi ghi đè
                 let currentSha = githubSha;
                 try {
-                    const checkRes = await fetch(url, {
-                        headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-                    });
-                    if(checkRes.ok) {
-                        const checkData = await checkRes.json();
-                        currentSha = checkData.sha;
-                    }
+                    const checkRes = await fetch(url, { headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' } });
+                    if(checkRes.ok) { const checkData = await checkRes.json(); currentSha = checkData.sha; }
                 } catch (e) { }
 
                 const payloadStr = JSON.stringify(appState);
                 const base64Content = utoa(payloadStr);
 
-                const body = {
-                    message: `Cập nhật dữ liệu từ điểm trạm lúc ${new Date().toLocaleTimeString('vi-VN')}`,
-                    content: base64Content
-                };
-                
-                // Nếu file đã tồn tại, REST API yêu cầu cung cấp đúng SHA để cho phép thay thế
-                if (currentSha) {
-                    body.sha = currentSha;
-                }
+                const body = { message: `Cập nhật dữ liệu từ điểm trạm lúc ${new Date().toLocaleTimeString('vi-VN')}`, content: base64Content };
+                if (currentSha) body.sha = currentSha;
 
                 const putRes = await fetch(url, {
                     method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
                     body: JSON.stringify(body)
                 });
 
@@ -601,44 +681,32 @@
                 }
 
                 const putData = await putRes.json();
-                githubSha = putData.content.sha; // Cập nhật SHA mới trên máy local
-                
-                log(`Lưu trữ Cloud thành công! Dữ liệu được bảo toàn. Phiên bản: ${githubSha.substring(0, 7)}...`, 'success');
+                githubSha = putData.content.sha; 
+                log(`Lưu trữ Cloud thành công! Phiên bản: ${githubSha.substring(0, 7)}...`, 'success');
             } catch (err) {
                 log(`Lỗi truyền tải dữ liệu: ${err.message}`, 'error');
-                if(err.message.toLowerCase().includes("conflict")) {
-                     log("PHÁT HIỆN XUNG ĐỘT: Dữ liệu trên Cloud đã bị thay đổi bởi thiết bị khác. Vui lòng bấm 'Cấu hình -> Tải Data' trước khi thử lại.", "error");
-                }
+                if(err.message.toLowerCase().includes("conflict")) log("PHÁT HIỆN XUNG ĐỘT: Bấm 'Cấu hình -> Tải Data' trước khi thử lại.", "error");
             } finally {
                 btnSyncCloud.disabled = false;
-                btnSyncCloud.innerHTML = `
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                    Đồng bộ Cloud
-                `;
+                btnSyncCloud.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg> Đồng bộ Cloud`;
             }
         }
 
-        // --- STREAMING_CHUNK:File Reading and Parsing Logic... ---
+        // --- STREAMING_CHUNK:Xử lý Đọc File & Trích xuất... ---
         function updateFileUI() {
             if (accumulatedFiles.length > 0) {
                 fileLabel.textContent = `Nhấn để thêm file khác`;
                 fileListContainer.classList.remove('hidden');
                 document.getElementById('fileCountText').textContent = accumulatedFiles.length;
-                
                 selectedFilesList.innerHTML = '';
                 accumulatedFiles.forEach(file => {
-                    const li = document.createElement('li');
-                    li.textContent = file.name;
-                    selectedFilesList.appendChild(li);
+                    const li = document.createElement('li'); li.textContent = file.name; selectedFilesList.appendChild(li);
                 });
-
-                btnProcess.disabled = false;
-                btnProcess.classList.remove('opacity-50', 'cursor-not-allowed');
+                btnProcess.disabled = false; btnProcess.classList.remove('opacity-50', 'cursor-not-allowed');
             } else {
                 fileLabel.textContent = 'Nhấn để thêm file Excel / HTML';
                 fileListContainer.classList.add('hidden');
-                btnProcess.disabled = true;
-                btnProcess.classList.add('opacity-50', 'cursor-not-allowed');
+                btnProcess.disabled = true; btnProcess.classList.add('opacity-50', 'cursor-not-allowed');
             }
         }
 
@@ -646,18 +714,13 @@
             const files = e.target.files;
             if (files.length > 0) {
                 for (let i = 0; i < files.length; i++) {
-                    const isDup = accumulatedFiles.some(f => f.name === files[i].name && f.size === files[i].size);
-                    if (!isDup) accumulatedFiles.push(files[i]);
+                    if (!accumulatedFiles.some(f => f.name === files[i].name && f.size === files[i].size)) accumulatedFiles.push(files[i]);
                 }
-                updateFileUI();
-                fileInput.value = ''; 
+                updateFileUI(); fileInput.value = ''; 
             }
         });
 
-        btnClearFiles.addEventListener('click', () => {
-            accumulatedFiles = [];
-            updateFileUI();
-        });
+        btnClearFiles.addEventListener('click', () => { accumulatedFiles = []; updateFileUI(); });
 
         function processHTMLBackup(file) {
             return new Promise((resolve, reject) => {
@@ -668,27 +731,17 @@
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(htmlStr, 'text/html');
                         const stateScript = doc.getElementById('app-state');
-                        
                         if(stateScript) {
                             const importedState = JSON.parse(stateScript.textContent);
                             importedState.facilities.forEach(fac => {
-                                if(!appState.facilities.includes(fac)) {
-                                    appState.facilities.push(fac);
-                                    appState.data[fac] = [];
-                                }
-                                if(importedState.data[fac] && importedState.data[fac].length > 0) {
-                                    appState.data[fac] = appState.data[fac].concat(importedState.data[fac]);
-                                }
+                                if(!appState.facilities.includes(fac)) { appState.facilities.push(fac); appState.data[fac] = []; }
+                                if(importedState.data[fac]) appState.data[fac] = appState.data[fac].concat(importedState.data[fac]);
                             });
-                            renderFacilitySelect(); 
-                            resolve(true);
-                        } else {
-                            resolve(false);
-                        }
+                            renderFacilitySelect(); resolve(true);
+                        } else resolve(false);
                     } catch (err) { reject(err); }
                 }
-                reader.onerror = reject;
-                reader.readAsText(file);
+                reader.onerror = reject; reader.readAsText(file);
             });
         }
 
@@ -707,15 +760,22 @@
                             if(aoa.length < 2) return; 
 
                             let headerRowIndex = -1;
-                            for (let r = 0; r < Math.min(10, aoa.length); r++) {
-                                if (aoa[r].some(cell => typeof cell === 'string' && cell.toUpperCase().includes("HỌ VÀ TÊN"))) {
-                                    headerRowIndex = r; break;
+                            let normalizedHeaders = [];
+                            
+                            for (let r = 0; r < Math.min(15, aoa.length); r++) {
+                                let tempHeaders = aoa[r].map(c => typeof c === 'string' ? c.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim().toUpperCase() : "");
+                                if (tempHeaders.includes("HỌ VÀ TÊN")) {
+                                    headerRowIndex = r;
+                                    normalizedHeaders = tempHeaders;
+                                    break;
                                 }
                             }
-                            if (headerRowIndex === -1) return;
+                            
+                            if (headerRowIndex === -1) {
+                                throw new Error(`Lỗi xử lý file ${file.name}: Không tìm thấy dòng chứa tiêu đề 'HỌ VÀ TÊN'.`);
+                            }
 
-                            const headers = aoa[headerRowIndex].map(h => (h||"").toString().toUpperCase().trim());
-                            const hasDateColumn = headers.includes("NGÀY") || headers.includes("NGÀY KHÁM");
+                            const hasDateColumn = normalizedHeaders.includes("NGÀY") || normalizedHeaders.includes("NGÀY KHÁM");
                             let currentDate = "";
 
                             for (let r = headerRowIndex + 1; r < aoa.length; r++) {
@@ -723,7 +783,7 @@
                                 if (row.length === 0 || row.every(c => c === "")) continue;
 
                                 if (!hasDateColumn) {
-                                    const possibleDateStr = (row[0] || row[1] || row[2] || "").toString().trim();
+                                    const possibleDateStr = (row[0] || row[1] || row[2] || "").toString().replace(/[\r\n]+/g, ' ').trim();
                                     if (possibleDateStr.toLowerCase().startsWith("ngày")) {
                                         currentDate = possibleDateStr.replace(/ngày\s*/i, '').trim();
                                         continue; 
@@ -732,8 +792,8 @@
 
                                 let rowData = {};
                                 let hasName = false;
-                                for (let c = 0; c < headers.length; c++) {
-                                    const head = headers[c];
+                                for (let c = 0; c < normalizedHeaders.length; c++) {
+                                    const head = normalizedHeaders[c];
                                     if (head) {
                                         rowData[head] = row[c] !== undefined ? row[c] : "";
                                         if (head === "HỌ VÀ TÊN" && row[c] && row[c].toString().trim() !== "") hasName = true;
@@ -742,8 +802,6 @@
 
                                 if (hasName) {
                                     rowData["NGÀY"] = !hasDateColumn ? currentDate : (rowData["NGÀY"] || rowData["NGÀY KHÁM"] || "");
-                                    
-                                    // BỘ LỌC CHỐNG RÁC: Chỉ lấy bản ghi có NGÀY hợp lệ
                                     const validDateStr = rowData["NGÀY"].toString().trim();
                                     if (validDateStr !== "" && validDateStr.includes("/")) {
                                         fileRows.push(rowData);
@@ -754,87 +812,57 @@
                         resolve(fileRows);
                     } catch (err) { reject(err); }
                 };
-                reader.onerror = reject;
-                reader.readAsArrayBuffer(file);
+                reader.onerror = reject; reader.readAsArrayBuffer(file);
             });
         }
 
-        // --- STREAMING_CHUNK:Process Data Button & Daily Deduplication... ---
         btnProcess.addEventListener('click', async () => {
             if (accumulatedFiles.length === 0) return;
-            btnProcess.disabled = true;
-            btnProcess.innerHTML = `<div class="spinner"></div> Đang xử lý...`;
+            btnProcess.disabled = true; btnProcess.innerHTML = `<div class="spinner"></div> Đang xử lý...`;
             
             try {
                 let newlyExtractedData = [];
                 for (let i = 0; i < accumulatedFiles.length; i++) {
                     const file = accumulatedFiles[i];
-                    if(file.name.toLowerCase().endsWith('.html')) {
-                        await processHTMLBackup(file);
-                    } else {
+                    if(file.name.toLowerCase().endsWith('.html')) await processHTMLBackup(file);
+                    else {
                         const rows = await processExcelFile(file);
                         newlyExtractedData = newlyExtractedData.concat(rows);
                     }
                 }
                 
-                if(newlyExtractedData.length > 0) {
-                     appState.data[appState.currentFacility] = appState.data[appState.currentFacility].concat(newlyExtractedData);
-                }
+                if(newlyExtractedData.length > 0) appState.data[appState.currentFacility] = appState.data[appState.currentFacility].concat(newlyExtractedData);
 
-                // Sắp xếp tổng thể theo Thời gian (Cũ -> Mới)
                 appState.data[appState.currentFacility].sort((a, b) => {
                     const dateA = parseVNDateToObj(a["NGÀY"]).getTime();
                     const dateB = parseVNDateToObj(b["NGÀY"]).getTime();
                     if (dateA !== dateB) return dateA - dateB;
-                    
                     const timeA = (a["GIỜ VÀO"] || "00:00").toString();
                     const timeB = (b["GIỜ VÀO"] || "00:00").toString();
                     return timeA.localeCompare(timeB);
                 });
 
-                // LỌC TRÙNG THEO NGÀY (Daily Deduplication)
-                // Chỉ xóa nếu 1 người bị nhập 2 lần TRONG CÙNG 1 NGÀY.
-                // Lưu giữ mọi lượt khám của bệnh nhân ở CÁC NGÀY KHÁC NHAU.
                 const seenDaily = new Set();
                 const dailyDedupedData = [];
                 let removedCount = 0;
 
                 for (const row of appState.data[appState.currentFacility]) {
-                    const id = generateUniqueId(row);
-                    const date = row["NGÀY"];
-                    const dailyId = id + "___" + date; // Key = ID + Date
-                    
-                    if (!seenDaily.has(dailyId)) {
-                        seenDaily.add(dailyId);
-                        dailyDedupedData.push(row);
-                    } else {
-                        removedCount++;
-                    }
+                    const dailyId = generateUniqueId(row) + "___" + row["NGÀY"];
+                    if (!seenDaily.has(dailyId)) { seenDaily.add(dailyId); dailyDedupedData.push(row); } 
+                    else removedCount++;
                 }
                 
                 appState.data[appState.currentFacility] = dailyDedupedData;
-
                 log(`Đã xóa ${removedCount} dòng rác/nhập đúp cùng ngày.`, 'success');
                 
-                accumulatedFiles = [];
-                updateFileUI();
-                updateRecordCountUI();
-                renderDashboard(); // Cập nhật lại biểu đồ
-                
-                // TỰ ĐỘNG ĐỒNG BỘ NẾU ĐÃ CẤU HÌNH KHÓA TRUY CẬP
-                if(sessionStorage.getItem('gh_token')) {
-                    syncToGitHub();
-                }
+                accumulatedFiles = []; updateFileUI(); updateRecordCountUI(); renderDashboard();
+                if(sessionStorage.getItem('gh_token')) syncToGitHub();
 
-            } catch (error) {
-                log(`LỖI: ${error.message}`, 'error');
-            } finally {
-                btnProcess.disabled = false;
-                btnProcess.innerHTML = `Đọc & Đồng Bộ Dữ Liệu`;
-            }
+            } catch (error) { log(`LỖI: ${error.message}`, 'error'); alert(error.message);
+            } finally { btnProcess.disabled = false; btnProcess.innerHTML = `Đọc & Đồng Bộ Dữ Liệu`; }
         });
 
-        // --- STREAMING_CHUNK:Dashboard Generation (Bảng Theo Dõi)... ---
+        // --- STREAMING_CHUNK:Thống Kê, Tra Cứu và Xuất Báo Cáo... ---
         document.getElementById('btnRefreshDashboard').addEventListener('click', renderDashboard);
 
         function renderDashboard() {
@@ -843,58 +871,34 @@
             const currentData = appState.data[appState.currentFacility] || [];
             
             tbody.innerHTML = '';
-            
-            if(currentData.length === 0) {
-                emptyMsg.classList.remove('hidden');
-                return;
-            } else {
-                emptyMsg.classList.add('hidden');
-            }
+            if(currentData.length === 0) { emptyMsg.classList.remove('hidden'); return; } 
+            else emptyMsg.classList.add('hidden');
 
-            // 1. Tìm ngày khám ĐẦU TIÊN của mỗi bệnh nhân (Để xác định Ca Mới)
             const absoluteFirstVisitsMap = new Map(); 
             currentData.forEach(row => {
                  const id = generateUniqueId(row);
-                 // Do currentData đã được sort Cũ -> Mới, nên lần gặp đầu tiên chính là ngày cũ nhất.
                  if(!absoluteFirstVisitsMap.has(id)) absoluteFirstVisitsMap.set(id, row["NGÀY"]);
             });
 
-            // 2. Thống kê theo từng ngày
-            const stats = {}; // Date -> { total: 0, new: 0 }
+            const stats = {}; 
             currentData.forEach(row => {
                 const date = row["NGÀY"];
                 const id = generateUniqueId(row);
-                
                 if(!stats[date]) stats[date] = { total: 0, new: 0 };
-                
-                stats[date].total++; // Đếm tổng lượt khám trong ngày
-                
-                // Nếu ngày khám này TRÙNG VỚI ngày đầu tiên của bệnh nhân này => Tính 1 ca mới
-                if(absoluteFirstVisitsMap.get(id) === date) {
-                    stats[date].new++;
-                }
+                stats[date].total++; 
+                if(absoluteFirstVisitsMap.get(id) === date) stats[date].new++;
             });
 
-            // 3. Sắp xếp các ngày từ Cũ -> Mới và tính Lũy Kế
             const sortedDates = Object.keys(stats).sort((a, b) => parseVNDateToObj(a).getTime() - parseVNDateToObj(b).getTime());
-            
-            let cumulativeNew = 0;
-            let stt = 1;
+            let cumulativeNew = 0; let stt = 1;
             const dashboardData = [];
 
             sortedDates.forEach(date => {
                 const s = stats[date];
                 cumulativeNew += s.new;
-                dashboardData.push({
-                    stt: stt++,
-                    date: date,
-                    total: s.total,
-                    new: s.new,
-                    cumulative: cumulativeNew
-                });
+                dashboardData.push({ stt: stt++, date: date, total: s.total, new: s.new, cumulative: cumulativeNew });
             });
 
-            // Đảo ngược mảng để hiển thị từ Mới nhất -> Cũ hơn
             dashboardData.reverse().forEach(row => {
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-gray-100 hover:bg-gray-50 transition";
@@ -909,23 +913,16 @@
             });
         }
 
-        // --- STREAMING_CHUNK:Patient Search & History... ---
         document.getElementById('btnSearch').addEventListener('click', performSearch);
-        document.getElementById('searchInput').addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') performSearch();
-        });
+        document.getElementById('searchInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') performSearch(); });
 
         function performSearch() {
             const query = document.getElementById('searchInput').value.toLowerCase().trim();
             const resultsContainer = document.getElementById('searchResults');
             const currentData = appState.data[appState.currentFacility] || [];
             
-            if(query === "") {
-                resultsContainer.innerHTML = '<div class="text-center text-gray-400 py-10">Vui lòng nhập từ khóa để tìm kiếm.</div>';
-                return;
-            }
-
-            const patientsMap = {}; // Gom nhóm theo ID
+            if(query === "") { resultsContainer.innerHTML = '<div class="text-center text-gray-400 py-10">Vui lòng nhập từ khóa để tìm kiếm.</div>'; return; }
+            const patientsMap = {};
 
             currentData.forEach(row => {
                 const id = generateUniqueId(row);
@@ -938,19 +935,13 @@
                     if (!patientsMap[id]) {
                         patientsMap[id] = {
                             info: {
-                                name: row["HỌ VÀ TÊN"] || "Chưa rõ",
-                                dob: row["NGÀY THÁNG NĂM SINH"] || row["NĂM SINH"] || "",
-                                gender: row["GIỚI TÍNH"] || "",
-                                cccd: row["ĐDCN/ GIẤY TỜ TÙY THÂN"] || "Trống",
-                                bhyt: row["SỐ THẺ BHYT"] || "Trống"
-                            },
-                            visits: []
+                                name: row["HỌ VÀ TÊN"] || "Chưa rõ", dob: row["NGÀY THÁNG NĂM SINH"] || row["NĂM SINH"] || "",
+                                gender: row["GIỚI TÍNH"] || "", cccd: row["ĐDCN/ GIẤY TỜ TÙY THÂN"] || "Trống", bhyt: row["SỐ THẺ BHYT"] || "Trống"
+                            }, visits: []
                         };
                     }
-                    // Đẩy lượt khám vào lịch sử (Đã được sort sẵn thời gian do currentData đã sort)
                     patientsMap[id].visits.push({
-                        date: row["NGÀY"],
-                        time: row["GIỜ VÀO"] || "--:--",
+                        date: row["NGÀY"], time: row["GIỜ VÀO"] || "--:--",
                         diagnosis: row["CHẨN ĐOÁN"] || row["CĐ XÁC ĐỊNH"] || "Không ghi chú",
                         treatment: row["PHƯƠNG PHÁP ĐIỀU TRỊ"] || "Không ghi chú",
                         doctor: row["Y, BÁC SĨ KHÁM BỆNH"] || row["BÁC SĨ"] || ""
@@ -960,126 +951,69 @@
 
             const patientKeys = Object.keys(patientsMap);
             resultsContainer.innerHTML = '';
-
-            if (patientKeys.length === 0) {
-                resultsContainer.innerHTML = `<div class="text-center text-red-500 py-10 font-medium">Không tìm thấy bệnh nhân nào khớp với từ khóa "${query}".</div>`;
-                return;
-            }
+            if (patientKeys.length === 0) { resultsContainer.innerHTML = `<div class="text-center text-red-500 py-10 font-medium">Không tìm thấy bệnh nhân.</div>`; return; }
 
             patientKeys.forEach(id => {
                 const p = patientsMap[id];
                 const card = document.createElement('div');
                 card.className = "bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition mb-4";
                 
-                // Patient Header Info
                 const header = document.createElement('div');
                 header.className = "bg-indigo-50/50 p-4 border-b border-gray-100 flex justify-between items-start";
                 header.innerHTML = `
-                    <div>
-                        <h3 class="text-lg font-bold text-indigo-900">${p.info.name} <span class="text-sm font-normal text-gray-500">(${p.info.gender} - ${p.info.dob})</span></h3>
-                        <div class="text-xs text-gray-600 mt-1 flex gap-4">
-                            <span><b>CCCD:</b> ${p.info.cccd}</span>
-                            <span><b>BHYT:</b> ${p.info.bhyt}</span>
-                        </div>
-                    </div>
+                    <div><h3 class="text-lg font-bold text-indigo-900">${p.info.name} <span class="text-sm font-normal text-gray-500">(${p.info.gender} - ${p.info.dob})</span></h3>
+                    <div class="text-xs text-gray-600 mt-1 flex gap-4"><span><b>CCCD:</b> ${p.info.cccd}</span><span><b>BHYT:</b> ${p.info.bhyt}</span></div></div>
                     <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2.5 py-1 rounded-full">${p.visits.length} lượt khám</span>
                 `;
                 
-                // Visit History Table
-                const historyDiv = document.createElement('div');
-                historyDiv.className = "p-0 overflow-x-auto";
-                
-                let tbodyRows = p.visits.map((v, index) => `
+                const historyDiv = document.createElement('div'); historyDiv.className = "p-0 overflow-x-auto";
+                let tbodyRows = p.visits.map(v => `
                     <tr class="border-b last:border-0 border-gray-50 text-sm hover:bg-gray-50">
                         <td class="px-4 py-3 whitespace-nowrap text-gray-600 font-medium">${v.date} <br><span class="text-xs text-gray-400">${v.time}</span></td>
-                        <td class="px-4 py-3 text-gray-800">${v.diagnosis}</td>
-                        <td class="px-4 py-3 text-gray-600">${v.treatment}</td>
+                        <td class="px-4 py-3 text-gray-800">${v.diagnosis}</td><td class="px-4 py-3 text-gray-600">${v.treatment}</td>
                         <td class="px-4 py-3 whitespace-nowrap text-gray-500 text-xs">${v.doctor}</td>
                     </tr>
                 `).join('');
 
-                historyDiv.innerHTML = `
-                    <table class="w-full text-left">
-                        <thead class="text-xs text-gray-500 bg-gray-50">
-                            <tr>
-                                <th class="px-4 py-2 w-24">Ngày/Giờ</th>
-                                <th class="px-4 py-2 w-1/3">Chẩn Đoán</th>
-                                <th class="px-4 py-2 w-1/3">Điều Trị</th>
-                                <th class="px-4 py-2">Bác Sĩ</th>
-                            </tr>
-                        </thead>
-                        <tbody>${tbodyRows}</tbody>
-                    </table>
-                `;
-                
-                card.appendChild(header);
-                card.appendChild(historyDiv);
-                resultsContainer.appendChild(card);
+                historyDiv.innerHTML = `<table class="w-full text-left"><thead class="text-xs text-gray-500 bg-gray-50"><tr><th class="px-4 py-2 w-24">Ngày/Giờ</th><th class="px-4 py-2 w-1/3">Chẩn Đoán</th><th class="px-4 py-2 w-1/3">Điều Trị</th><th class="px-4 py-2">Bác Sĩ</th></tr></thead><tbody>${tbodyRows}</tbody></table>`;
+                card.appendChild(header); card.appendChild(historyDiv); resultsContainer.appendChild(card);
             });
         }
 
-        // --- STREAMING_CHUNK:Report Generation and Excel Export (Updated Logic)... ---
         function prepareReportSets() {
             const currentData = appState.data[appState.currentFacility] || [];
             if(currentData.length === 0) throw new Error("Cơ sở này chưa có dữ liệu nào để xuất.");
             const selectedDateStr = document.getElementById('reportDate').value;
             if(!selectedDateStr) throw new Error("Vui lòng chọn ngày báo cáo.");
             
-            // TẠO CÁC TẬP DỮ LIỆU ĐỂ EXPORT
-            let outputDataSets = {
-                TongBanGhi: [...currentData], // Tập tất cả lượt khám (đã xóa đúp cùng ngày)
-                TongDaXoaTrung: [],           // Tập Lọc tuyệt đối (Chỉ lấy ngày khám Lần 1 của bệnh nhân)
-                Daily: {},              
-                BaoCaoTong: []          
-            };
+            let outputDataSets = { TongBanGhi: [...currentData], TongDaXoaTrung: [], Daily: {}, BaoCaoTong: [] };
 
-            // THUẬT TOÁN BÓC TÁCH CA MỚI (Lọc tuyệt đối)
             const absoluteFirstVisitsMap = new Map();
             currentData.forEach(row => {
                  const id = generateUniqueId(row);
-                 // Giữ lại bản ghi đầu tiên xuất hiện (là ngày cũ nhất do đã sort)
                  if(!absoluteFirstVisitsMap.has(id)) absoluteFirstVisitsMap.set(id, row);
             });
             outputDataSets.TongDaXoaTrung = Array.from(absoluteFirstVisitsMap.values());
 
-            // 5 TAB NGÀY LIÊN TIẾP (Trích từ tập Đã Xóa Trùng Tuyệt Đối)
             const selectedDateObj = new Date(selectedDateStr);
             const targetDaysString = []; 
             for(let i=0; i<5; i++) {
-                let d = new Date(selectedDateObj);
-                d.setDate(d.getDate() - i);
-                const dd = String(d.getDate()).padStart(2, '0');
-                const mm = String(d.getMonth() + 1).padStart(2, '0');
-                const yyyy = d.getFullYear();
-                targetDaysString.push(`${dd}/${mm}/${yyyy}`);
+                let d = new Date(selectedDateObj); d.setDate(d.getDate() - i);
+                targetDaysString.push(`${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`);
             }
 
-            targetDaysString.forEach(dateStr => {
-                outputDataSets.Daily[dateStr] = outputDataSets.TongDaXoaTrung.filter(r => r["NGÀY"] === dateStr);
-            });
+            targetDaysString.forEach(dateStr => { outputDataSets.Daily[dateStr] = outputDataSets.TongDaXoaTrung.filter(r => r["NGÀY"] === dateStr); });
 
-            // BÁO CÁO TỔNG LUỸ KẾ
             const countByDate = {};
-            outputDataSets.TongDaXoaTrung.forEach(row => {
-                const d = row["NGÀY"];
-                countByDate[d] = (countByDate[d] || 0) + 1;
-            });
+            outputDataSets.TongDaXoaTrung.forEach(row => { countByDate[row["NGÀY"]] = (countByDate[row["NGÀY"]] || 0) + 1; });
 
             const sortedDates = Object.keys(countByDate).sort((a, b) => parseVNDateToObj(a).getTime() - parseVNDateToObj(b).getTime());
-            
-            let cumulative = 0;
-            let stt = 1;
+            let cumulative = 0; let stt = 1;
             sortedDates.forEach(dateStr => {
                 const countNew = countByDate[dateStr];
                 cumulative += countNew;
-                outputDataSets.BaoCaoTong.push({
-                    "STT": stt++,
-                    "Ngày": dateStr,
-                    "Số mới": countNew,
-                    "Số lũy kế": cumulative
-                });
+                outputDataSets.BaoCaoTong.push({ "STT": stt++, "Ngày": dateStr, "Số mới": countNew, "Số lũy kế": cumulative });
             });
-
             return outputDataSets;
         }
 
@@ -1087,68 +1021,46 @@
             try {
                 log("Đang phân tích số liệu báo cáo...", 'info');
                 const outputDataSets = prepareReportSets();
-                
                 log("Đang tạo cấu trúc file Excel...", 'info');
                 const wb = XLSX.utils.book_new();
 
-                // --- KHỞI TẠO ĐỊNH DẠNG EXCEL (STYLE) ---
-                const headerStyle = {
-                    font: { bold: true, color: { rgb: "FFFFFF" } },
-                    fill: { fgColor: { rgb: "2563EB" } }, // Màu xanh Tailwind Blue-600
-                    alignment: { horizontal: "center", vertical: "center", wrapText: true },
-                    border: { top: {style:'thin'}, bottom: {style:'thin'}, left: {style:'thin'}, right: {style:'thin'} }
-                };
-                
-                const cellStyle = {
-                    alignment: { vertical: "center", wrapText: true }, // Tự động xuống dòng
-                    border: { top: {style:'thin'}, bottom: {style:'thin'}, left: {style:'thin'}, right: {style:'thin'} }
-                };
-                
+                const headerStyle = { font: { bold: true, color: { rgb: "FFFFFF" } }, fill: { fgColor: { rgb: "2563EB" } }, alignment: { horizontal: "center", vertical: "center", wrapText: true }, border: { top: {style:'thin'}, bottom: {style:'thin'}, left: {style:'thin'}, right: {style:'thin'} } };
+                const cellStyle = { alignment: { vertical: "center", wrapText: true }, border: { top: {style:'thin'}, bottom: {style:'thin'}, left: {style:'thin'}, right: {style:'thin'} } };
                 const centerStyle = { ...cellStyle, alignment: { horizontal: "center", vertical: "center", wrapText: true } };
 
-                // Hàm tiện ích để quét và áp dụng style cho toàn bộ trang tính
                 const applySheetStyle = (ws, isBaoCao = false) => {
                     const range = XLSX.utils.decode_range(ws['!ref']);
                     for (let R = range.s.r; R <= range.e.r; ++R) {
                         for (let C = range.s.c; C <= range.e.c; ++C) {
                             const cellRef = XLSX.utils.encode_cell({r: R, c: C});
                             if (!ws[cellRef]) continue;
-                            
-                            if (R === 0) ws[cellRef].s = headerStyle; // Dòng 1 luôn là Header
-                            else ws[cellRef].s = (isBaoCao || C < 3) ? centerStyle : cellStyle; // Căn giữa cho tab Báo cáo hoặc 3 cột đầu tiên (STT, Ngày, Giờ)
+                            if (R === 0) ws[cellRef].s = headerStyle; 
+                            else ws[cellRef].s = (isBaoCao || C < 3) ? centerStyle : cellStyle; 
                         }
                     }
                 };
 
-                // 1. Xuất Báo Cáo Tổng
                 const wsBaoCao = XLSX.utils.json_to_sheet(outputDataSets.BaoCaoTong);
                 applySheetStyle(wsBaoCao, true);
-                wsBaoCao['!cols'] = [{wch: 10}, {wch: 15}, {wch: 15}, {wch: 15}]; // Độ rộng cột riêng cho tab báo cáo
+                wsBaoCao['!cols'] = [{wch: 10}, {wch: 15}, {wch: 15}, {wch: 15}];
                 XLSX.utils.book_append_sheet(wb, wsBaoCao, "Báo Cáo Tổng");
 
-                // Headers Definition
                 const exportCols = ["STT", "NGÀY", "GIỜ VÀO"];
                 if(appState.data[appState.currentFacility].length > 0) {
-                    const sampleHeaders = Object.keys(appState.data[appState.currentFacility][0]);
-                    sampleHeaders.forEach(h => {
+                    Object.keys(appState.data[appState.currentFacility][0]).forEach(h => {
                         if (h !== "STT" && h !== "NGÀY" && h !== "GIỜ VÀO") exportCols.push(h);
                     });
                 }
 
                 const buildSheetData = (dataArr) => {
-                    let aoa = [exportCols]; 
-                    let stt = 1;
+                    let aoa = [exportCols]; let stt = 1;
                     dataArr.forEach(row => {
-                        let rowData = [stt++]; 
-                        rowData.push(row["NGÀY"] || "");
-                        rowData.push(row["GIỜ VÀO"] || "");
+                        let rowData = [stt++, row["NGÀY"] || "", row["GIỜ VÀO"] || ""];
                         for (let i = 3; i < exportCols.length; i++) rowData.push(row[exportCols[i]] || "");
                         aoa.push(rowData);
                     });
                     const ws = XLSX.utils.aoa_to_sheet(aoa);
-                    applySheetStyle(ws); // Áp dụng định dạng ô vuông, tràn viền
-                    
-                    // Thiết lập ĐỘ RỘNG CỘT tự động bắt theo tên Tiêu Đề
+                    applySheetStyle(ws); 
                     ws['!cols'] = exportCols.map(col => {
                         const c = col.toUpperCase();
                         if(c === "STT") return { wch: 6 };
@@ -1157,38 +1069,28 @@
                         if(c.includes("ĐDCN") || c.includes("BHYT") || c.includes("THẺ")) return { wch: 18 };
                         if(c.includes("ĐỊA CHỈ")) return { wch: 30 };
                         if(c.includes("TRIỆU CHỨNG") || c.includes("CHẨN ĐOÁN") || c.includes("ĐIỀU TRỊ") || c.includes("PHƯƠNG PHÁP") || c.includes("GHI CHÚ")) return { wch: 45 };
-                        return { wch: 20 }; // Mặc định
+                        return { wch: 20 };
                     });
-
                     return ws;
                 }
 
-                // Tổng Tabs
                 XLSX.utils.book_append_sheet(wb, buildSheetData(outputDataSets.TongBanGhi), "Tổng Bản Ghi");
                 XLSX.utils.book_append_sheet(wb, buildSheetData(outputDataSets.TongDaXoaTrung), "Tổng Đã Xóa Trùng");
 
-                // 5 Daily Tabs
                 const dateKeys = Object.keys(outputDataSets.Daily).sort((a,b) => parseVNDateToObj(b).getTime() - parseVNDateToObj(a).getTime());
                 dateKeys.forEach(dateStr => {
-                    const safeTabName = "Ngày " + dateStr.replace(/\//g, '-');
-                    XLSX.utils.book_append_sheet(wb, buildSheetData(outputDataSets.Daily[dateStr]), safeTabName);
+                    XLSX.utils.book_append_sheet(wb, buildSheetData(outputDataSets.Daily[dateStr]), "Ngày " + dateStr.replace(/\//g, '-'));
                 });
 
-                // Tải xuống
                 const facSafe = appState.currentFacility.replace(/[^a-zA-Z0-9]/g, '');
                 const fileName = `SSKDT_BaoCao_${facSafe}_${formatDateToVN(document.getElementById('reportDate').value).replace(/\//g, '')}.xlsx`;
                 XLSX.writeFile(wb, fileName);
                 log(`Xuất thành công: ${fileName}`, 'success');
 
-            } catch (error) {
-                log(`Lỗi xuất file: ${error.message}`, 'error');
-                alert(error.message);
-            }
+            } catch (error) { log(`Lỗi xuất file: ${error.message}`, 'error'); alert(error.message); }
         });
 
-        // INIT
         window.onload = initApp;
-
     </script>
 </body>
 </html>
