@@ -595,7 +595,12 @@
                 if (saveBtn) { saveBtn.innerHTML = `<div class="spinner inline-block align-middle mr-2"></div> Đang tải...`; saveBtn.disabled = true; }
                 
                 const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-                const response = await fetch(url, { headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' } });
+                
+                // THÊM LỆNH CẤM TRÌNH DUYỆT LƯU ĐỆM KHI HỎI API
+                const response = await fetch(url, {
+                    headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Cache-Control': 'no-cache' },
+                    cache: 'no-store'
+                });
 
                 if (response.status === 404) {
                     log("Kho dữ liệu trống rỗng. File sẽ được tạo mới khi đồng bộ.", 'warning');
@@ -609,7 +614,13 @@
                     
                     if (!data.content && data.download_url) {
                         log("Phát hiện tệp dữ liệu lớn. Đang khởi tạo luồng tải trực tiếp...", 'warning');
-                        const rawResponse = await fetch(data.download_url);
+                        
+                        // TUYỆT CHIÊU XUYÊN THỦNG BỘ NHỚ ĐỆM (CACHE-BUSTING)
+                        // Gắn thêm biến t = Thời gian hiện tại vào đuôi link tải
+                        const separator = data.download_url.includes('?') ? '&' : '?';
+                        const noCacheUrl = `${data.download_url}${separator}t=${Date.now()}`;
+                        
+                        const rawResponse = await fetch(noCacheUrl, { cache: 'no-store' });
                         if(!rawResponse.ok) throw new Error(`Lỗi tải tệp dữ liệu thô (HTTP ${rawResponse.status})`);
                         jsonContent = await rawResponse.text();
                         
@@ -659,7 +670,11 @@
                 const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
                 let currentSha = githubSha;
                 try {
-                    const checkRes = await fetch(url, { headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' } });
+                    // CẤM LƯU ĐỆM KHI LẤY MÃ SHA (CHỐNG LỖI CONFLICT FILE)
+                    const checkRes = await fetch(url, { 
+                        headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Cache-Control': 'no-cache' },
+                        cache: 'no-store'
+                    });
                     if(checkRes.ok) { const checkData = await checkRes.json(); currentSha = checkData.sha; }
                 } catch (e) { }
 
